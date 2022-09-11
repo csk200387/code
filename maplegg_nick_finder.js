@@ -5,10 +5,10 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
 		replier.reply(msg.substr(6)+" 으로 시작하는 단어 "+count+"개를 찾았습니다.\n리스트 생성중\n딜레이를 걸어두어 살짝 걸릴 수 있습니다");
 		var arr = []; // 결과 출력할 빈 배열
 		var page = Math.ceil(count / 100); // 크롤링할 페이지 수
-		for(var l1 = 0; l1 < Math.ceil(page/2); l1++){
+		for(var l1 = 0; l1 < Math.ceil(page/2); l1++){ // 2페이지밖에 파싱을 안해서 for 하나 더 추가
 			for(var l = 0; l < page; l++){
 				var data = org.jsoup.Jsoup.connect("https://wordrow.kr/시작하는-말/"+msg.substr(6)+"/두%20글자/?쪽="+(l+1)).ignoreHttpErrors(true).ignoreContentType(true).get().select("body > div.content > section:nth-child(5) > div.larger > ul > li");
-				var size = data.size();
+				var size = data.size(); // 그 페이지의 단어 갯수들
 				for (var i = 0; i < size; i++){
 					var word = data.select("a").get(i).text();
 					var len = "";
@@ -19,7 +19,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
 					if(len == 0){ // 결과가 없으면 배열에 추가
 						arr.push(word);
 					}
-					java.lang.Thread.sleep(50);
+					java.lang.Thread.sleep(50); // 0.05초 딜레이
 				}
 			}
 		}
